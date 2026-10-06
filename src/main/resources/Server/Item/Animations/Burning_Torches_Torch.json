@@ -1,0 +1,11 @@
+{
+  "Parent": "Torch",
+  "Animations": {
+    "HoldTorch": {
+      "ThirdPerson": "Characters/Animations/Items/Off_Handed/Torch/Attacks/Build/Hold_Torch.blockyanim",
+      "Looping": true,
+      "FirstPerson": "Characters/Animations/Items/Off_Handed/Torch/Attacks/Build/Hold_Torch.blockyanim",
+      "Speed": 1
+    }
+  }
+}

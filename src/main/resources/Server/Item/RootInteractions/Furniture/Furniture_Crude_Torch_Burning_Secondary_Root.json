@@ -1,0 +1,7 @@
+{
+  "$Comment": "Root for the torch secondary. RequireNewClick is a RootInteraction-only field and is what makes a fresh right-click necessary: the Charging interaction below releases itself at 5s, so without this a held button would immediately start another charge and ignite again.",
+  "RequireNewClick": true,
+  "Interactions": [
+    "Furniture_Crude_Torch_Burning_Secondary_Charge"
+  ]
+}

@@ -21,6 +21,7 @@ provided by the Hytale runtime and is never bundled into the produced plugin art
 .\gradlew copyPluginClasses           # compile and copy bytecode into run/mods/<group>.<name>
 .\gradlew syncAssets                  # mirror the pack's assets and manifest into src/main/resources
 .\gradlew debugServer                 # run the server with a JDWP debug listener
+.\gradlew referencePaths              # show the asset and source-code reference paths
 ```
 
 `verifyHytaleDependency` fails with an actionable message when the server jar is missing or
@@ -144,6 +145,25 @@ Two settings matter:
 - Keep `hytale.plugin.includesAssetPack=false`. The folder already supplies the asset pack, so a
   classpath plugin registering the same `Group:Name` pack would collide. Set it `true` only when
   packaging a built jar whose own embedded asset pack should load.
+
+## Implementation references
+
+Before writing new code or assets, look at the reference material these two properties point at.
+Read them from `gradle.properties`; `.\gradlew referencePaths` prints them and warns about a path
+that no longer exists.
+
+| Property | What is there |
+| --- | --- |
+| `hytale.reference.assets` | Real asset JSON **plus the JSON schema for every asset type** — use the schemas to learn an asset's fields, and the existing JSON files as shape examples |
+| `hytale.reference.source` | A complete working plugin: commands, events, components, UI, and its own `Common/` and `Server/` assets — the closest analogue to this project |
+
+Both trees use the same `Common/` + `Server/` layout that `syncAssets` mirrors into
+`src/main/resources`, so anything copied from them lands at the same path in the jar.
+
+For the API itself — signatures, behaviour, what a class really does — the authoritative source is
+the installed `HytaleServer.jar` (inspect with `javap`), with the decompiled server sources listed
+as a comment in `gradle.properties` as a more readable alternative. The plugin entry point and
+manifest schema are documented further down this file.
 
 ## Local Hytale dependency
 

@@ -478,3 +478,33 @@ val debugHytaleServer = tasks.register<JavaExec>("debugServer") {
 tasks.test {
     useJUnitPlatform()
 }
+
+
+// --- Implementation references --------------------------------------------------------
+// Where to look when implementing plugin code and assets. Nothing in the build produces files
+// from these; `referencePaths` reports them so a stale path is obvious. See AGENTS.md.
+val hytaleReferenceAssets: String =
+    providers.gradleProperty("hytale.reference.assets").getOrElse("").trim()
+val hytaleReferenceSource: String =
+    providers.gradleProperty("hytale.reference.source").getOrElse("").trim()
+
+val referencePaths = tasks.register("referencePaths") {
+    group = "hytale"
+    description = "Prints the configured asset and source-code reference paths and checks they exist."
+
+    // Copied into locals: an execution-time lambda must not read script members, or the
+    // configuration cache cannot serialize it.
+    val assets = hytaleReferenceAssets
+    val source = hytaleReferenceSource
+    doLast {
+        listOf("hytale.reference.assets" to assets, "hytale.reference.source" to source).forEach { (name, path) ->
+            val file = File(path)
+            when {
+                path.isEmpty() -> logger.lifecycle("$name: <unset>")
+                file.isDirectory -> logger.lifecycle("$name: $path")
+                file.isFile -> logger.lifecycle("$name: $path (file)")
+                else -> logger.warn("$name: $path is missing - update gradle.properties")
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+{
+  "Type": "Charging",
+  "AllowIndefiniteHold": false,
+  "DisplayProgress": true,
+  "CancelOnOtherClick": true,
+  "Effects": {
+    "ItemPlayerAnimationsId": "Burning_Torches_Torch",
+    "ItemAnimationId": "HoldTorch",
+    "ClearAnimationOnFinish": true
+  },
+  "$Comment": "Torch secondary. AllowIndefiniteHold is false with a single 5.0 threshold, so ChargingInteraction.simulateTick0 finishes the charge by itself at 5s and jumps to the Next entry below. Only the >=5s path exists, so a shorter charge runs nothing.",
+  "Next": {
+    "5.0": {
+      "Type": "Selector",
+      "$Comment": "Ignition step. Raycast Distance caps how far wood can be lit at 4 blocks and BlockTag keeps it to Type=Wood, replacing the previous distance-less BlockCondition. When no block candidate is selected the HitBlock below is never forked, so nothing ignites and no torch is spent.",
+      "Selector": {
+        "Id": "Raycast",
+        "TestLineOfSight": true,
+        "Distance": 4,
+        "BlockTag": "Type=Wood",
+        "IgnoreFluids": false,
+        "IgnoreEmptyCollisionMaterial": false
+      },
+      "HitBlock": {
+        "Interactions": [
+          {
+            "$Comment": "Place Fire on the in-range wood block the raycast selected. RemoveItemInHand is false because consumption is done explicitly below, after the ignition.",
+            "Type": "PlaceFluid",
+            "FluidToPlace": "Fire",
+            "RemoveItemInHand": false,
+            "Effects": {
+              "WorldSoundEventId": "SFX_Flame_Build"
+            }
+          },
+          {
+            "$Comment": "Bookkeeping tail of the ignition: the torch is spent. AdjustHeldItemQuantity is negative so ModifyInventory removes from the held slot, which for a Secondary input is the hotbar torch.",
+            "Type": "ModifyInventory",
+            "AdjustHeldItemQuantity": -1
+          }
+        ]
+      }
+    }
+  }
+}

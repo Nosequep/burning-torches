@@ -1,0 +1,16 @@
+{
+  "Group": "com.poupapitas",
+  "Name": "burning-torches",
+  "Version": "0.1",
+  "Description": "",
+  "Authors": [],
+  "Website": "",
+  "Main": "org.example.TestPlugin",
+  "ServerVersion": ">=0.7.0-pre.5.1",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "LoadBefore": {},
+  "DisabledByDefault": false,
+  "IncludesAssetPack": true,
+  "SubPlugins": []
+}
